@@ -23,6 +23,7 @@ profile.cov
 # Go workspace file
 go.work
 go.work.sum
+build-errors.1og
 
 # env file
 .env
