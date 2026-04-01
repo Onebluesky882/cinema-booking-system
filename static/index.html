@@ -1,11 +1,59 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="/static/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <script src="/app.js"></script>
+    <title>Cinema Booking</title>
   </head>
   <body>
-    <h1>hell0</h1>
+    <header>
+      <h1>Cinema Booking</h1>
+      <div class="user-id" id="userBadge"></div>
+    </header>
+
+    <div class="movies" id="movieList"></div>
+
+    <div class="content" id="mainContent" style="display: none">
+      <div class="screen-area">
+        <div class="screen-label">Screen</div>
+        <div class="screen-bar"></div>
+        <div class="seat-grid" id="seatGrid"></div>
+        <div class="legend">
+          <div class="legend-item">
+            <div
+              class="legend-swatch"
+              style="background: var(--available)"
+            ></div>
+            Available
+          </div>
+          <div class="legend-item">
+            <div
+              class="legend-swatch"
+              style="background: var(--held-mine)"
+            ></div>
+            Your hold
+          </div>
+          <div class="legend-item">
+            <div
+              class="legend-swatch"
+              style="background: var(--held-other)"
+            ></div>
+            Other hold
+          </div>
+          <div class="legend-item">
+            <div
+              class="legend-swatch"
+              style="background: var(--confirmed)"
+            ></div>
+            Confirmed
+          </div>
+        </div>
+      </div>
+      <div id="checkoutArea"></div>
+    </div>
+
+ 
   </body>
 </html>
