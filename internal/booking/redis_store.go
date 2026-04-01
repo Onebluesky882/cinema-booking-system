@@ -1,6 +1,9 @@
 package booking
 
 import (
+	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -8,8 +11,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 )
-
-const defaultHoldTTL = 2 * time.Minute
 
 type RedisStore struct {
 	rdb *redis.Client
@@ -36,10 +37,28 @@ func (s *RedisStore) ListBooking(movieId string) []Booking {
 	return []Booking{}
 }
 
+const defaultHoldTTL = 2 * time.Minute
+
 func (s *RedisStore) hold(b Booking) (Booking, error) {
 	id := uuid.New().String()
 	now := time.Now()
+	ctx := context.Background()
+	key := fmt.Sprintf("seat:%s:%s", b.MovieID, b.SeatID)
+	b.ID = id
+	val, _ := json.Marshal(b)
 
+	res, err := s.rdb.SetArgs(ctx, key, val, redis.SetArgs{
+		Mode: "NX",
+		TTL:  defaultHoldTTL,
+	}).Result()
+
+	if err != nil {
+		return Booking{}, err
+	}
+	if res != "OK" {
+		return Booking{}, errors.New("seat already held")
+	}
+	s.rdb.Set(ctx, sessionKey(id), key, defaultHoldTTL)
 	return Booking{
 		ID:        id,
 		MovieID:   b.MovieID,
