@@ -5,12 +5,12 @@ import (
 	"sync/atomic"
 	"testing"
 
-	goredis "github.com/Onebluesky882/cinema-booking-system/internal/adapters/redis"
+	"github.com/Onebluesky882/cinema-booking-system/internal/adapters/redis"
 	"github.com/google/uuid"
 )
 
 func TestConcurentBooking_ExactlyOneWins(t *testing.T) {
-	store := NewRedisStore(goredis.NewClient("localhost:6379"))
+	store := NewRedisStore(redis.NewClient("localhost:6379"))
 	svc := NewService(store)
 
 	const numGoroutines = 100_000
